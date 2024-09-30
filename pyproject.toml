@@ -1,0 +1,32 @@
+[project]
+name = "mqtt-demo"
+version = "0.1.0"
+description = "Add your description here"
+authors = [
+    { name = "Brendon McCool", email = "BMccool@logikos.com" }
+]
+dependencies = [
+    "paho-mqtt>=2.1.0",
+    "pymccool>=0.4.2",
+]
+readme = "README.md"
+requires-python = ">= 3.8"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.rye]
+managed = true
+dev-dependencies = [
+    "pytest>=8.3.3",
+]
+
+[tool.hatch.metadata]
+allow-direct-references = true
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/mqtt_demo"]
+
+[tool.pytest.ini_options]
+addopts = "-v -ra -s"

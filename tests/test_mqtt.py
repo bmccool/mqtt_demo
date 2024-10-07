@@ -2,6 +2,7 @@
 
 import paho.mqtt.client as mqtt
 from pymccool.logging import Logger, LoggerKwargs
+import time
 
 logger = Logger(LoggerKwargs(app_name="TEST"))
 
@@ -24,7 +25,7 @@ def test_mqtt():
     mqttc = mqtt.Client(mqtt.CallbackAPIVersion.VERSION2)
     mqttc.on_connect = on_connect
     mqttc.on_message = on_message
-    mqttc.subscribe("sensors/+/temperature/+", qos=1)
+
 
     logger.info("Connecting to MQTT")
     error_code = mqttc.connect("127.0.0.1", 1883, 60)
@@ -32,17 +33,22 @@ def test_mqtt():
     mqttc.user_data_set("Hello, world!")
     logger.info(f"Connected with error code {error_code}")
     
-    logger.info("Publishing messages...")
-    mqttc.publish("sensors/fl13/temperature/AC", "25.0")
-    mqttc.publish("sensors/fl10/temperature/boiler", "25.1")
-    mqttc.publish("sensors/fl10/temperature/heater", "25.2")
 
+    mqttc.subscribe("sensors/+/temperature/+", qos=1)
     # Blocking call that processes network traffic, dispatches callbacks and
     # handles reconnecting.
     # Other loop*() functions are available that give a threaded interface and a
     # manual interface.
     logger.info("Looping")
-    error_code = mqttc.loop_forever()
-    logger.info(f"Looped with error code {error_code}")
-    logger.info(f"Received the following message: {mqttc.user_data_get()}")
+    error_code = mqttc.loop_start()
+
+    logger.info("Publishing messages...")
+    mqttc.publish("sensors/fl13/temperature/AC", "25.0")
+    time.sleep(1)
+    mqttc.publish("sensors/fl10/temperature/boiler", "25.1")
+    time.sleep(1)
+    mqttc.publish("sensors/fl10/temperature/heater", "25.2")
+    time.sleep(1)
+
+    mqttc.loop_stop()
     

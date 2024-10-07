@@ -8,6 +8,9 @@ authors = [
 dependencies = [
     "paho-mqtt>=2.1.0",
     "pymccool>=0.4.2",
+    "pyopenssl>=24.2.1",
+    "cryptography>=43.0.1",
+    "rich>=13.9.2",
 ]
 readme = "README.md"
 requires-python = ">= 3.8"
